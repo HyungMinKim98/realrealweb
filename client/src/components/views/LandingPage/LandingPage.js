@@ -10,6 +10,7 @@ function LandingPage() {
     const [Diary, setDiarys] = useState([]);
     const [movies, setMovies] = useState([]);  // 초기값을 빈 배열로 명확히 설정
     const [dramas, setDramas] = useState([]);  // 초기값을 빈 배열로 명확히 설정
+    const apiKey = process.env.REACT_APP_MOVIE_API_KEY;
 
     useEffect(() => {
         axios.get('/api/diary/getDiarys')
@@ -21,35 +22,37 @@ function LandingPage() {
                 }
             });
 
-        const fetchMovies = async () => {
-            try {
-                const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_MOVIE_API_KEY}&language=ko-KO&page=1`);
-                const data = await response.json();
-                console.log("Fetched Movies:", data);
-                if (data.results) {
-                    setMovies(data.results);
-                } else {
-                    console.error('Failed to fetch movies:', data);
+            const fetchMovies = async () => {
+                console.log("API Key:", process.env.REACT_APP_MOVIE_API_KEY);  // Debugging line
+                try {
+                    const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_MOVIE_API_KEY}&language=ko-KO&page=1`);
+                    const data = await response.json();
+                    if (response.ok) {  // Check if response is ok
+                        setMovies(data.results);
+                    } else {
+                        console.error('Failed to fetch movies:', data);
+                        alert('Failed to fetch movies: ' + data.status_message);
+                    }
+                } catch (error) {
+                    console.error('Error fetching movies:', error);
+                    alert('Error fetching movies: ' + error.message);
                 }
-            } catch (error) {
-                console.error('Error fetching movies:', error);
-            }
-        };
-
-        const fetchDramas = async () => {
-            try {
-                const response = await fetch(`https://api.themoviedb.org/3/tv/popular?api_key=${process.env.REACT_APP_MOVIE_API_KEY}&language=ko-KO&page=1`);
-                const data = await response.json();
-                if (data.results) {
-                    setDramas(data.results);
-                } else {
-                    console.error('Failed to fetch dramas:', data);
+            };
+            
+            const fetchDramas = async () => {
+                try {
+                    const url = `https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}&language=ko-KO&page=1`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    if (data.results) {
+                        setDramas(data.results);
+                    } else {
+                        console.error('Failed to fetch dramas:', data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching dramas:', error);
                 }
-            } catch (error) {
-                console.error('Error fetching dramas:', error);
-            }
-        };
-
+            };
         fetchMovies();
         fetchDramas();
     }, []);

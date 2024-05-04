@@ -23,7 +23,7 @@ function RightMenu(props) {
     return (
       <Menu mode={props.mode}>
         <Menu.Item key="upload">
-          <a href="/diary/upload">Diary</a>
+          <a href="/diary/upload">다이어리 작성</a>
         </Menu.Item>
         <Menu.Item key="userName">
           {user.userData.name}                    
@@ -37,10 +37,10 @@ function RightMenu(props) {
     return (        //이부분은 로그인 안 한 사람들이 보이는 페이지
       <Menu mode={props.mode}>
         <Menu.Item key="mail">
-          <a href="/login">Signin</a>
+          <a href="/login">로그인</a>
         </Menu.Item>
         <Menu.Item key="app">
-          <a href="/register">Signup</a>
+          <a href="/register">회원가입</a>
         </Menu.Item>
       </Menu>
     )
