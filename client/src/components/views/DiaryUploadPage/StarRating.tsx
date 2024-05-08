@@ -40,5 +40,4 @@ const StarRating: React.FC<StarRatingProps> = ({ rating, setRating }) => {
     </div>
   );
 };
-
 export default StarRating;

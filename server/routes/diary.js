@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { Diary } = require("../models/Diary");
-
 const { auth } = require("../middleware/auth");
 const multer = require("multer");
 
@@ -30,6 +29,7 @@ const upload = multer({ storage: storage }).single("file");
 
 //클라이언트 요청이 먼저 서버의 index.js로 와서 /api/video 이부분은 안 써도 됨
 
+// 파일 업로드 엔드포인트
 router.post('/uploadfiles', (req, res) => {
 
     //비디오를 서버에 저장한다
@@ -41,40 +41,62 @@ router.post('/uploadfiles', (req, res) => {
     }) 
 });         
 
-
+// 일기 업로드 엔드포인트
 router.post('/uploadDiary', (req, res) => {
+    const diary = new Diary({
+      ...req.body,
+      privacy: parseInt(req.body.privacy, 10),
+      category: parseInt(req.body.category, 10),
+      genre: parseInt(req.body.genre, 10),
+      rating: parseInt(req.body.rating, 10)
+    });
+  
+    diary.save((err, doc) => {
+      if (err) return res.json({ success: false, err });
+      res.status(200).json({ success: true });
+    });
+  });
+  
+// 일기 상세 정보 엔드포인트
+router.post("/getDiaryDetail", (req, res) => {
+    Diary.findOne({ "_id": req.body.diaryId })
+      .populate('writer')
+      .exec((err, diaryDetail) => {
+        if (err) return res.status(400).send({ success: false, err });
+        return res.status(200).json({ success: true, diaryDetail });
+      });
+  });
+//일기 수정
+  router.post('/updateDiary', (req, res) => {
+    Diary.findOneAndUpdate(
+      { "_id": req.body.diaryId },
+      {
+        $set: {
+          title: req.body.title,
+          description: req.body.description,
+          privacy: req.body.privacy,
+          category: req.body.category,
+          genre: req.body.genre,
+          rating: req.body.rating,
+          filePath: req.body.filePath
+        }
+      },
+      { new: true }, // Return the updated document
+      (err, doc) => {
+        if (err) return res.status(400).json({ success: false, err });
+        return res.status(200).json({ success: true, doc });
+      }
+    );
+  });
 
-    //비디오 정보들을 저장
-   const diary = new Diary(req.body)
-
-   diary.save((err, doc) => {
-    if(err) return res.json({ success: false, err })
-    res.status(200).json({ success: true })
-   })
-});         
-
-router.post("/getDiaryDetail", (req,res) =>{
-
-    Diary.findOne({ "_id" : req.body.postId})
-    .populate('writer')
-    .exec((err, diaryDetail) =>{
-        if(err) return res.status(400).send(err)
-        return res.status(200).json({ success: true, diaryDetail})
-    })
-});
-
+// 전체 일기 목록 엔드포인트
 router.get('/getDiarys', (req, res) => {
-
-    //비디오를 db에서 가져와서 클라이언트에 보낸다
     Diary.find()
-        .populate('writer')
-        .exec((err, diarys)=> {
-            if(err) return res.status(400).send(err);
-            res.status(200).json({ success: true, diarys})
-        })
-   
-});         
-
-
+      .populate('writer')
+      .exec((err, diarys) => {
+        if (err) return res.status(400).send(err);
+        res.status(200).json({ success: true, diarys });
+      });
+  });
 
 module.exports = router;
