@@ -4,7 +4,7 @@ import Dropzone from 'react-dropzone';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import StarRating from '../DiaryUploadPage/StarRating';
-import { PrivacyOptions, CategoryOptions, GenreOptions } from '../DiaryUploadPage/Options';
+import { PrivacyOptions, CategoryOptions, GenreOptions } from './Options';
 
 const { TextArea } = Input;
 const { Title } = Typography;

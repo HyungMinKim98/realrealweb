@@ -4,30 +4,17 @@ import Dropzone from 'react-dropzone';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import StarRating from './StarRating'; // 별점 컴포넌트 경로 확인
-
+import { GenreOptions, PrivacyOptions, CategoryOptions } from '../DiaryEditPage/Options';
 const { TextArea } = Input;
 const { Title } = Typography;
 const { Option } = Select;
 
-const PrivateOptions = [
-    { value: 0, label: "Private" },
-    { value: 1, label: "Public" }
-];
-
-const CategoryOptions = [
-    { value: 0, label: "Film & Animation" },
-    { value: 1, label: "Autos & Vehicles" },
-    { value: 2, label: "Music" },
-    { value: 3, label: "Pets & Animals" }
-];
-
-const GenreOptions = ['Action', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Romance', 'Thriller'];
 
 function DiaryUploadPage(props) {
     const user = useSelector(state => state.user);
     const [DiaryTitle, setDiaryTitle] = useState("");
     const [Description, setDescription] = useState("");
-    const [Private, setPrivate] = useState(0);
+    const [Privacy, setPrivacy] = useState(0);
     const [Category, setCategory] = useState("Film & Animation");
     const [DiaryDate, setDiaryDate] = useState(null);
     const [Genre, setGenre] = useState("");
@@ -41,8 +28,8 @@ function DiaryUploadPage(props) {
         setDescription(value);
     };
 
-    const onPrivateChange = (value) => {
-        setPrivate(value)
+    const onPrivacyChange = (value) => {
+        setPrivacy(value)
     };
 
     const onCategoryChange = (value) => {
@@ -76,7 +63,7 @@ function DiaryUploadPage(props) {
             writer: user.userData._id,
             title: DiaryTitle,
             description: Description,
-            privacy: Private,
+            privacy: Privacy,
             category: Category,
             genre: Genre,
             date: DiaryDate,
@@ -126,8 +113,8 @@ function DiaryUploadPage(props) {
                 <br />
 
                 <label>Privacy</label>
-                <Select onChange={onPrivateChange}>
-                    {PrivateOptions.map(genre => (
+                <Select onChange={onPrivacyChange}>
+                    {PrivacyOptions.map(genre => (
                         <Option key={genre} value={genre}>{genre}</Option>
                     ))}
                 </Select>

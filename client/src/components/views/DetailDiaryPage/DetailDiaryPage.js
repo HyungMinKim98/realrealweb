@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Avatar, Typography, Divider, Button, Row, Col } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import { PrivacyOptions, CategoryOptions, GenreOptions } from '../DiaryUploadPage/Options';
+import { PrivacyOptions, CategoryOptions, GenreOptions } from '../DiaryEditPage/Options';
 
 const { Title, Paragraph, Text } = Typography;
 

@@ -18,3 +18,9 @@ export const PrivacyOptions = [
     { value: 5, label: "Romance" },
     { value: 6, label: "Thriller" }
   ];
+
+  export const GenderOptions = [
+    { value: "남성", label: "남성" },
+    { value: "여성", label: "여성" },
+    { value: "N/A", label: "기타" }
+  ];
